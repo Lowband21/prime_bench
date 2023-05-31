@@ -1,0 +1,12 @@
+/Users/travis/build/Lowband21/prime_bench/target/debug/deps/cocoa-b47a678c548590ee.rmeta: /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/lib.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/appkit.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/base.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/foundation.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/quartzcore.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/macros.rs
+
+/Users/travis/build/Lowband21/prime_bench/target/debug/deps/libcocoa-b47a678c548590ee.rlib: /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/lib.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/appkit.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/base.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/foundation.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/quartzcore.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/macros.rs
+
+/Users/travis/build/Lowband21/prime_bench/target/debug/deps/cocoa-b47a678c548590ee.d: /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/lib.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/appkit.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/base.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/foundation.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/quartzcore.rs /Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/macros.rs
+
+/Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/lib.rs:
+/Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/appkit.rs:
+/Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/base.rs:
+/Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/foundation.rs:
+/Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/quartzcore.rs:
+/Users/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/cocoa-0.24.1/src/macros.rs:

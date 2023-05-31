@@ -1,0 +1,1 @@
+{"rustc":3659767333214291318,"features":"","target":0,"profile":0,"path":0,"deps":[[9895030543256154542,"build_script_build",false,5877948424571841913]],"local":[{"RerunIfChanged":{"output":"debug/build/unicode-linebreak-a2f30ec77147b87f/output","paths":["LineBreak.txt"]}}],"rustflags":[],"metadata":0,"config":0,"compile_kind":0}
