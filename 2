@@ -220,89 +220,26 @@ impl Application for GUI {
             .spacing(10);
 
         // The main column layout is simplified.
-        Column::new()
-            .push(thread_choice_row)
-            .push(scale_input)
-            .push(compute_result_column)
-            .padding(20)
-            .align_items(Alignment::Center)
-            .into()
+        iced_native::Element::new(
+            Column::new()
+                .push(thread_choice_row)
+                .push(scale_input)
+                .push(compute_result_column)
+                .padding(20)
+                .align_items(Alignment::Center),
+        )
     }
 }
 
 use iced::application;
 use iced::widget::button;
-use iced::widget::button::Appearance;
 use iced::widget::button::StyleSheet;
-use iced::widget::text_input;
 use iced::Color;
 use iced_native::renderer::Style;
-
-use iced::Background;
-impl iced::widget::text_input::StyleSheet for MainTheme {
-    type Style = MainTheme;
-
-    fn active(&self, _style: &Self::Style) -> text_input::Appearance {
-        text_input::Appearance {
-            background: Background::Color(Color::WHITE),
-            border_radius: 5.0,
-            border_width: 0.0,
-            border_color: Color::WHITE,
-            icon_color: Color::WHITE,
-        }
-    }
-
-    fn focused(&self, _style: &Self::Style) -> text_input::Appearance {
-        text_input::Appearance {
-            background: Background::Color(Color::WHITE),
-            border_radius: 2.0,
-            border_width: 1.0,
-            border_color: Color {
-                a: 0.5,
-                ..Color::BLACK
-            },
-            icon_color: Color::WHITE,
-        }
-    }
-
-    fn placeholder_color(&self, _style: &Self::Style) -> Color {
-        Color::WHITE
-    }
-
-    fn value_color(&self, _style: &Self::Style) -> Color {
-        Color::WHITE
-    }
-
-    fn selection_color(&self, _style: &Self::Style) -> Color {
-        Color::WHITE
-    }
-    fn disabled(&self, _style: &Self::Style) -> Color {
-        Color::WHITE
-    }
-
-    fn disabled_color() -> Color {
-        Color::WHITE
-    }
-
-    /// Produces the style of an hovered text input.
-    fn hovered(&self, style: &Self::Style) -> text_input::Appearance {
-        self.focused(style)
-    }
-}
 
 #[derive(Default)]
 pub struct MainTheme;
 
-impl iced::widget::button::StyleSheet for MainTheme {
-    type Style = MainTheme;
-    fn active(&self, _: &Self) -> iced::widget::button::Appearance {
-        iced::widget::button::Appearance {
-            text_color: Color::WHITE,
-            ..Appearance::default()
-        }
-    }
-    // implement other methods like hovered, disabled, etc.
-}
 impl application::StyleSheet for MainTheme {
     type Style = MainTheme;
 
@@ -314,6 +251,37 @@ impl application::StyleSheet for MainTheme {
         }
     }
 }
+/*
+// CustomButtonStyle
+pub struct CustomButtonStyle;
+
+impl button::StyleSheet for CustomButtonStyle {
+    fn active(&self, _button: &button::Button<Message>) -> Style {
+        Style {
+            text_color: Color::WHITE,
+            ..Style::default()
+        }
+    }
+
+    fn hovered(&self, _button: &button::Button<Message>) -> Style {
+        let active = self.active(_button);
+
+        Style {
+            text_color: Color::WHITE,
+            ..active
+        }
+    }
+
+    fn pressed(&self, _button: &button::Button<Message>) -> Style {
+        let active = self.active(_button);
+
+        Style {
+            text_color: Color::WHITE,
+            ..active
+        }
+    }
+}
+*/
 use iced_native;
 
 fn main() {
