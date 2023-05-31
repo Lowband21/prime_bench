@@ -3,6 +3,18 @@
 version = 3
 
 [[package]]
+name = "PrimeBench"
+version = "0.1.0"
+dependencies = [
+ "num-bigint",
+ "num-traits",
+ "num_cpus",
+ "rand",
+ "rayon",
+ "requestty",
+]
+
+[[package]]
 name = "ahash"
 version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -447,18 +459,6 @@ dependencies = [
  "once_cell",
  "textwrap",
  "unicode-segmentation",
-]
-
-[[package]]
-name = "rsa_rt_messager"
-version = "0.1.0"
-dependencies = [
- "num-bigint",
- "num-traits",
- "num_cpus",
- "rand",
- "rayon",
- "requestty",
 ]
 
 [[package]]
