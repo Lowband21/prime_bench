@@ -79,9 +79,9 @@ fn solovay_strassen(n: &BigUint, iterations: u32) -> bool {
 }
 
 use num_cpus;
-use requestty::*;
+//use requestty::*;
 
-use iced::widget::{button, text_input, Button, Column, Text, TextInput};
+use iced::widget::{Button, Column, Row, Text, TextInput};
 use iced::{Alignment, Element, Sandbox, Settings};
 
 // Reuse your existing functions here...
@@ -89,9 +89,9 @@ use iced::{Alignment, Element, Sandbox, Settings};
 #[derive(Default)]
 struct GUI {
     thread_choice: Thread,
-    scale_input: text_input::State,
-    scale: String,
-    compute_button: button::State,
+    scale_input: String,
+    compute_button: Message,
+    scale: f64,
     result: Option<String>,
 }
 
@@ -114,11 +114,23 @@ enum Message {
     Compute,
 }
 
+impl Default for Message {
+    fn default() -> Self {
+        Message::Compute
+    }
+}
+
 impl Sandbox for GUI {
     type Message = Message;
 
-    fn new() -> Self {
-        Self::default()
+    fn new() -> GUI {
+        GUI {
+            scale_input: "3.0".to_string(),
+            compute_button: Message::Compute,
+            thread_choice: Thread::Multi, // initialize other fields...
+            scale: 2.0,
+            result: None,
+        }
     }
 
     fn title(&self) -> String {
@@ -131,35 +143,36 @@ impl Sandbox for GUI {
                 self.thread_choice = thread;
             }
             Message::ScaleChanged(scale) => {
-                self.scale = scale;
+                self.scale_input = scale.clone();
+                match scale.parse::<f64>() {
+                    Ok(value) => {
+                        self.scale = value;
+                    }
+                    Err(_) => {
+                        // Handle the case where `scale` couldn't be parsed as an `f32`
+                        // For example, you might want to log an error, or set `scale` to a default value
+                    }
+                }
             }
             Message::Compute => {
-                let scale = self.scale.parse().unwrap_or(1.0);
+                let scale = self.scale;
                 let result = match self.thread_choice {
-                    Thread::Single => {
-                        // single_core_bench(scale);
-                        "Single-thread result".to_string()
-                    }
-                    Thread::Multi => {
-                        // multi_core_bench(scale);
-                        "Multi-thread result".to_string()
-                    }
+                    Thread::Single => single_core_bench(scale),
+                    Thread::Multi => multi_core_bench(scale),
                 };
                 self.result = Some(result);
             }
         }
     }
 
-    fn view(&mut self) -> Element<Self::Message> {
-        let scale_input = TextInput::new(
-            &mut self.scale_input,
-            "Enter scale factor",
-            &self.scale,
-            Message::ScaleChanged,
-        );
+    fn view(&self) -> Element<Self::Message> {
+        let scale_input: iced_native::widget::text_input::TextInput<
+            '_,
+            Message,
+            iced_wgpu::Renderer,
+        > = TextInput::new(&self.scale_input, &self.scale_input).on_input(Message::ScaleChanged);
 
-        let compute_button =
-            Button::new(&mut self.compute_button, Text::new("Compute")).on_press(Message::Compute);
+        let compute_button = Button::new(Text::new("Compute")).on_press(Message::Compute);
 
         let result_text = if let Some(result) = &self.result {
             Text::new(result)
@@ -173,22 +186,39 @@ impl Sandbox for GUI {
         let multi_thread_button =
             Button::new(Text::new("Multi-thread")).on_press(Message::ThreadChanged(Thread::Multi));
 
-        Column::new()
+        // The thread choice buttons are placed in a row.
+        let thread_choice_row = Row::new()
             .push(single_thread_button)
             .push(multi_thread_button)
-            .push(scale_input)
+            .spacing(20)
+            .align_items(Alignment::Center);
+
+        // The compute button and result text are grouped together.
+        let compute_result_column = Column::new()
             .push(compute_button)
             .push(result_text)
+            .spacing(10);
+
+        // The main column layout is simplified.
+        Column::new()
+            .push(thread_choice_row)
+            .push(scale_input)
+            .push(compute_result_column)
             .padding(20)
             .align_items(Alignment::Center)
             .into()
     }
 }
 
+use iced_native;
+
 fn main() {
-    GUI::run(Settings::default());
+    match GUI::run(Settings::default()) {
+        Ok(_) => println!("Program exited with status code 1"),
+        Err(_) => println!("Program exited with status code -1"),
+    };
 }
-fn single_core_bench(scale: f64) {
+fn single_core_bench(scale: f64) -> String {
     let num_cores = num_cpus::get();
     // Adjust these parameters for the workload.
     let num_tries_per_core = (1024.0 * scale) as usize;
@@ -213,16 +243,16 @@ fn single_core_bench(scale: f64) {
 
     let elapsed = now.elapsed().as_secs_f64();
 
-    println!(
-        "Found {} {} bit prime numbers in {} attempts and {}s",
-        num_primes, num_bits, total_tries, elapsed
-    );
-
     let score = total_tries as f64 / elapsed;
-    println!("Score: {:.2} tries/s", score);
+
+    let print = format!(
+        "Found {} {} bit prime numbers in {} attempts and {:.4}s\nScore: {:.2} tries/s",
+        num_primes, num_bits, total_tries, elapsed, score
+    );
+    print
 }
 
-fn multi_core_bench(scale: f64) {
+fn multi_core_bench(scale: f64) -> String {
     let num_cores = num_cpus::get();
     // Adjust these parameters for the workload.
     let num_tries_per_core = (1024.0 * scale) as usize;
@@ -246,12 +276,11 @@ fn multi_core_bench(scale: f64) {
         .sum();
 
     let elapsed = now.elapsed().as_secs_f64();
-
-    println!(
-        "Found {} {} bit prime numbers in {} attempts and {:.4}s",
-        num_primes, num_bits, total_tries, elapsed
-    );
-
     let score = total_tries as f64 / elapsed;
-    println!("Score: {:.2} tries/s", score);
+
+    let print = format!(
+        "Found {} {} bit prime numbers in {} attempts and {:.4}s\nScore: {:.2} tries/s",
+        num_primes, num_bits, total_tries, elapsed, score
+    );
+    print
 }

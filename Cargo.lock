@@ -1778,6 +1778,8 @@ name = "prime_bench"
 version = "0.1.0"
 dependencies = [
  "iced",
+ "iced_native",
+ "iced_wgpu",
  "num-bigint",
  "num-traits",
  "num_cpus",
