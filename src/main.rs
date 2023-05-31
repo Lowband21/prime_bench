@@ -232,12 +232,12 @@ impl Application for GUI {
 }
 
 use iced::application;
-use iced::widget::button;
+//use iced::widget::button;
 use iced::widget::button::Appearance;
-use iced::widget::button::StyleSheet;
+//use iced::widget::button::StyleSheet;
 use iced::widget::text_input;
 use iced::Color;
-use iced_native::renderer::Style;
+//use iced_native::renderer::Style;
 
 impl iced::widget::text::StyleSheet for MainTheme {
     type Style = MainTheme;
