@@ -81,44 +81,112 @@ fn solovay_strassen(n: &BigUint, iterations: u32) -> bool {
 use num_cpus;
 use requestty::*;
 
+use iced::widget::{button, text_input, Button, Column, Text, TextInput};
+use iced::{Alignment, Element, Sandbox, Settings};
+
+// Reuse your existing functions here...
+
+#[derive(Default)]
+struct GUI {
+    thread_choice: Thread,
+    scale_input: text_input::State,
+    scale: String,
+    compute_button: button::State,
+    result: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug)]
 enum Thread {
-    Multi,
     Single,
+    Multi,
+}
+
+impl Default for Thread {
+    fn default() -> Self {
+        Thread::Single
+    }
+}
+
+#[derive(Debug, Clone)]
+enum Message {
+    ThreadChanged(Thread),
+    ScaleChanged(String),
+    Compute,
+}
+
+impl Sandbox for GUI {
+    type Message = Message;
+
+    fn new() -> Self {
+        Self::default()
+    }
+
+    fn title(&self) -> String {
+        String::from("Prime Number Generator")
+    }
+
+    fn update(&mut self, message: Self::Message) {
+        match message {
+            Message::ThreadChanged(thread) => {
+                self.thread_choice = thread;
+            }
+            Message::ScaleChanged(scale) => {
+                self.scale = scale;
+            }
+            Message::Compute => {
+                let scale = self.scale.parse().unwrap_or(1.0);
+                let result = match self.thread_choice {
+                    Thread::Single => {
+                        // single_core_bench(scale);
+                        "Single-thread result".to_string()
+                    }
+                    Thread::Multi => {
+                        // multi_core_bench(scale);
+                        "Multi-thread result".to_string()
+                    }
+                };
+                self.result = Some(result);
+            }
+        }
+    }
+
+    fn view(&mut self) -> Element<Self::Message> {
+        let scale_input = TextInput::new(
+            &mut self.scale_input,
+            "Enter scale factor",
+            &self.scale,
+            Message::ScaleChanged,
+        );
+
+        let compute_button =
+            Button::new(&mut self.compute_button, Text::new("Compute")).on_press(Message::Compute);
+
+        let result_text = if let Some(result) = &self.result {
+            Text::new(result)
+        } else {
+            Text::new("")
+        };
+
+        let single_thread_button = Button::new(Text::new("Single-thread"))
+            .on_press(Message::ThreadChanged(Thread::Single));
+
+        let multi_thread_button =
+            Button::new(Text::new("Multi-thread")).on_press(Message::ThreadChanged(Thread::Multi));
+
+        Column::new()
+            .push(single_thread_button)
+            .push(multi_thread_button)
+            .push(scale_input)
+            .push(compute_button)
+            .push(result_text)
+            .padding(20)
+            .align_items(Alignment::Center)
+            .into()
+    }
 }
 
 fn main() {
-    let core_question = Question::select("core")
-        .message("Multi-core or single-core?")
-        .default(1)
-        .choice("Single-thread")
-        .choice("Multi-thread");
-    let core_answer = &requestty::prompt_one(core_question).unwrap();
-    let core = match core_answer.as_list_item().unwrap().text.as_str() {
-        "Single-thread" => Thread::Single,
-        "Multi-thread" => Thread::Multi,
-        &_ => panic!("Impossible"),
-    };
-
-    match core {
-        Thread::Single => {
-            let scale_question = Question::float("scale")
-                .message("Enter a scale factor: ")
-                .default(0.2)
-                .build();
-            let answer = &requestty::prompt_one(scale_question).unwrap();
-            let scale = answer.as_float().unwrap().clone();
-            single_core_bench(scale);
-        }
-        Thread::Multi => {
-            let scale_question = Question::float("scale")
-                .message("Enter a scale factor: ")
-                .default(3.0)
-                .build();
-            let answer = &requestty::prompt_one(scale_question).unwrap();
-            let scale = answer.as_float().unwrap().clone();
-            multi_core_bench(scale);
-        }
-    }
+    GUI::run(Settings::default());
 }
 fn single_core_bench(scale: f64) {
     let num_cores = num_cpus::get();
