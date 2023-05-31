@@ -1,6 +1,6 @@
 # Prime Bench - A Prime Number Finding Benchmark Program
 ## Overview
-Do you have hardware just sitting there after burning a hole in your wallet? Do you want to see it sweat?
+Do you have hardware just sitting there after having burnt a hole through your wallet? Do you want to see it sweat?
 Have I got the program for you, Prime Bench is a benchmark program written in Rust, optimized for multi-threaded performance and single-threaded use. The program aims to search for prime numbers using a Monte Carlo method based on the Solovay-Strassen primality test, and in the process, measure the performance of your system.
 The program allows users to perform this benchmark in either single core or all core mode, giving flexibility in terms of understanding the capability of the hardware in both scenarios.
 
@@ -11,8 +11,16 @@ The program allows users to perform this benchmark in either single core or all 
 - Interactive User Interface: The program includes a command-line interactive user interface for an easy-to-navigate experience.
 
 ## Installation
+### Download Binary
+Just navigate to the releases page and download either the Linux or Windows binary
+### Install with Cargo
+Just install cargo and run:
+```
+cargo install prime_bench
+prime_bench
+```
+### Build from Source
 First, clone the repository:
-
 ```
 git clone https://github.com/YourGitHub/prime_explorer.git
 cd prime_bench
@@ -20,7 +28,6 @@ cd prime_bench
 Then, run the project with cargo:
 ```
 cargo run --release
-
 ```
 
 The program will prompt you to choose between "Multi-thread" or "Single-thread". Depending on your choice, it will run the program utilizing either multiple cores or a single core.
@@ -28,6 +35,9 @@ The program will prompt you to choose between "Multi-thread" or "Single-thread".
 Next, you will be asked to enter a scale factor. This number is a multiplier for the base workload per core, allowing you to adjust the duration and intensity of the benchmark.
 
 The program will then generate and test random numbers for primality. Finally, it will output the number of primes found, total attempts made, time taken, and the score which indicates the number of tries per second.
+
+## Known Issues:
+The GUI version of the program will crash under Wayland if run as a native Wayland window. The solution for the moment is to prefix with `WINIT_UNIX_BACKEND=x11`
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
