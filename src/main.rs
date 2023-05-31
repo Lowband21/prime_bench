@@ -151,7 +151,7 @@ fn single_core_bench(scale: f64) {
     );
 
     let score = total_tries as f64 / elapsed;
-    println!("Score: {:>2} tries/s", score);
+    println!("Score: {:.2} tries/s", score);
 }
 
 fn multi_core_bench(scale: f64) {
