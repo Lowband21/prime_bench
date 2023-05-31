@@ -189,7 +189,7 @@ impl Application for GUI {
         let scale_input: iced_native::widget::text_input::TextInput<
             '_,
             Message,
-            iced_wgpu::Renderer,
+            iced_graphics::renderer::Renderer<iced_wgpu::Backend, MainTheme>,
         > = TextInput::new(&self.scale_input, &self.scale_input).on_input(Message::ScaleChanged);
 
         let compute_button = Button::new(Text::new("Compute")).on_press(Message::Compute);
@@ -215,15 +215,16 @@ impl Application for GUI {
 
         // The compute button and result text are grouped together.
         let compute_result_column = Column::new()
+            .push(scale_input)
             .push(compute_button)
-            .push(result_text)
-            .spacing(10);
+            .spacing(10)
+            .align_items(Alignment::Center);
 
         // The main column layout is simplified.
         Column::new()
             .push(thread_choice_row)
-            .push(scale_input)
             .push(compute_result_column)
+            .push(result_text)
             .padding(20)
             .align_items(Alignment::Center)
             .into()
@@ -238,13 +239,22 @@ use iced::widget::text_input;
 use iced::Color;
 use iced_native::renderer::Style;
 
+impl iced::widget::text::StyleSheet for MainTheme {
+    type Style = MainTheme;
+    fn appearance(&self, _style: Self::Style) -> iced::widget::text::Appearance {
+        iced::widget::text::Appearance {
+            color: Some(Color::WHITE),
+            // more definitions here
+        }
+    }
+}
 use iced::Background;
 impl iced::widget::text_input::StyleSheet for MainTheme {
     type Style = MainTheme;
 
     fn active(&self, _style: &Self::Style) -> text_input::Appearance {
         text_input::Appearance {
-            background: Background::Color(Color::WHITE),
+            background: Background::Color(Color::from_rgb(0.2, 0.2, 0.2)),
             border_radius: 5.0,
             border_width: 0.0,
             border_color: Color::WHITE,
@@ -254,12 +264,12 @@ impl iced::widget::text_input::StyleSheet for MainTheme {
 
     fn focused(&self, _style: &Self::Style) -> text_input::Appearance {
         text_input::Appearance {
-            background: Background::Color(Color::WHITE),
+            background: Background::Color(Color::from_rgb(0.2, 0.2, 0.2)),
             border_radius: 2.0,
             border_width: 1.0,
             border_color: Color {
                 a: 0.5,
-                ..Color::BLACK
+                ..Color::WHITE
             },
             icon_color: Color::WHITE,
         }
@@ -276,11 +286,20 @@ impl iced::widget::text_input::StyleSheet for MainTheme {
     fn selection_color(&self, _style: &Self::Style) -> Color {
         Color::WHITE
     }
-    fn disabled(&self, _style: &Self::Style) -> Color {
-        Color::WHITE
+    fn disabled(&self, _style: &Self::Style) -> text_input::Appearance {
+        text_input::Appearance {
+            background: Background::Color(Color::BLACK),
+            border_radius: 2.0,
+            border_width: 1.0,
+            border_color: Color {
+                a: 0.5,
+                ..Color::WHITE
+            },
+            icon_color: Color::WHITE,
+        }
     }
 
-    fn disabled_color() -> Color {
+    fn disabled_color(&self, _style: &Self::Style) -> Color {
         Color::WHITE
     }
 
@@ -290,7 +309,7 @@ impl iced::widget::text_input::StyleSheet for MainTheme {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct MainTheme;
 
 impl iced::widget::button::StyleSheet for MainTheme {
@@ -309,7 +328,7 @@ impl application::StyleSheet for MainTheme {
     fn appearance(&self, _style: &Self::Style) -> application::Appearance {
         application::Appearance {
             text_color: Color::WHITE,
-            background_color: Color::BLACK,
+            background_color: Color::from_rgb(0.2, 0.2, 0.2),
             // more definitions here
         }
     }
